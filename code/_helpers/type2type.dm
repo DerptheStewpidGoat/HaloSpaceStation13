@@ -346,3 +346,15 @@ proc/tg_list2text(list/list, glue=",")
 
 /proc/isLeap(y)
 	return ((y) % 4 == 0 && ((y) % 100 != 0 || (y) % 400 == 0))
+
+/proc/diagonal_to_cardinal(var/diagonal_dir)
+	. = 0
+	switch(diagonal_dir)
+		if(NORTHEAST)
+			return NORTH
+		if(SOUTHEAST)
+			return EAST
+		if(SOUTHWEST)
+			return SOUTH
+		if(NORTHWEST)
+			return WEST

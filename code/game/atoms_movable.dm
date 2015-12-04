@@ -25,13 +25,11 @@
 	var/turf/curturf = get_turf(src)
 	if(istype(curturf, /turf/simulated/floor/open))
 		curturf.Enter(src)
-/proc/generate_debug_runtime() // Guaranteed to runtime and print a stack trace to the runtime log
-	var/t = 0 // BYOND won't let us do var/t = 1/0 directly, but it's fine with this.
-	t = 1 / t
+
 /atom/movable/Del()
 	if(isnull(gcDestroyed) && loc)
 		testing("GC: -- [type] was deleted via del() rather than qdel() --")
-		generate_debug_runtime() // stick a stack trace in the runtime logs
+		crash_with("GC: -- [type] was deleted via del() rather than qdel() --") // stick a stack trace in the runtime logs
 //	else if(isnull(gcDestroyed))
 //		testing("GC: [type] was deleted via GC without qdel()") //Not really a huge issue but from now on, please qdel()
 //	else
@@ -141,9 +139,6 @@
 	var/area/a = get_area(src.loc)
 	if(dist_x > dist_y)
 		var/error = dist_x/2 - dist_y
-
-
-
 		while(src && target &&((((src.x < target.x && dx == EAST) || (src.x > target.x && dx == WEST)) && dist_travelled < range) || (a && a.has_gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && istype(src.loc, /turf))
 			// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
 			if(error < 0)
@@ -238,7 +233,7 @@
 		return
 
 	if(config.use_overmap)
-		overmap_spacetravel(get_turf(src), src)
+		overmap_controller.overmap_spacetravel(get_turf(src), src)
 		return
 
 	var/move_to_z = src.get_transit_zlevel()
@@ -249,7 +244,7 @@
 			x = world.maxx - TRANSITIONEDGE - 2
 			y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
 
-		else if (x >= (world.maxx - TRANSITIONEDGE - 1))
+		else if (x >= (world.maxx - TRANSITIONEDGE + 1))
 			x = TRANSITIONEDGE + 1
 			y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
 
@@ -257,13 +252,13 @@
 			y = world.maxy - TRANSITIONEDGE -2
 			x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
 
-		else if (y >= (world.maxy - TRANSITIONEDGE - 1))
+		else if (y >= (world.maxy - TRANSITIONEDGE + 1))
 			y = TRANSITIONEDGE + 1
 			x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
 
-		if(ticker && istype(ticker.mode, /datum/game_mode/nuclear)) //only really care if the game mode is nuclear
-			var/datum/game_mode/nuclear/G = ticker.mode
-			G.check_nuke_disks()
+		/*if(ticker && istype(ticker.mode, /datum/game_mode/insurrection)) //only really care if the game mode is insurrection
+			var/datum/game_mode/insurrection/G = ticker.mode
+			G.check_nuke_disks()*/
 
 		spawn(0)
 			if(loc) loc.Entered(src)

@@ -108,9 +108,6 @@
 		else
 	return
 
-/obj/item/blob_act()
-	return
-
 //user: The mob that is suiciding
 //damagetype: The type of damage the item will inflict on the user
 //BRUTELOSS = 1
@@ -409,7 +406,12 @@ var/list/global/slot_flags_enumeration = list(
 /obj/item/proc/ui_action_click()
 	attack_self(usr)
 
-/obj/item/proc/IsShield()
+//RETURN VALUES
+//handle_shield should return a positive value to indicate that the attack is blocked and should be prevented.
+//If a negative value is returned, it should be treated as a special return value for bullet_act() and handled appropriately.
+//For non-projectile attacks this usually means the attack is blocked.
+//Otherwise should return 0 to indicate that the attack is not affected in any way.
+/obj/item/proc/handle_shield(mob/user, var/damage, atom/damage_source = null, mob/attacker = null, var/def_zone = null, var/attack_text = "the attack")
 	return 0
 
 /obj/item/proc/get_loc_turf()
@@ -435,6 +437,9 @@ var/list/global/slot_flags_enumeration = list(
 	user.attack_log += "\[[time_stamp()]\]<font color='red'> Attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
 	M.attack_log += "\[[time_stamp()]\]<font color='orange'> Attacked by [user.name] ([user.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
 	msg_admin_attack("[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)") //BS12 EDIT ALG
+
+	user.setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
+	user.do_attack_animation(M)
 
 	src.add_fingerprint(user)
 	//if((CLUMSY in user.mutations) && prob(50))
@@ -609,7 +614,3 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 
 /obj/item/proc/pwr_drain()
 	return 0 // Process Kill
-
-/obj/item/proc/resolve_attackby(atom/A, mob/source)
-	return A.attackby(src,source)
-

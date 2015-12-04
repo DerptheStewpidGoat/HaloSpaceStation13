@@ -9,7 +9,7 @@ var/datum/announcement/minor/captain_announcement = new(do_newscast = 1)
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
-	supervisors = "company officials and Corporate Regulations"
+	supervisors = "CENTCOM and UNSC regulations"
 	selection_color = "#ccccff"
 	idtype = /obj/item/weapon/card/id/gold
 	req_admin_notify = 1
@@ -24,7 +24,7 @@ var/datum/announcement/minor/captain_announcement = new(do_newscast = 1)
 			if(2) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/captain(H), slot_back)
 			if(3) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_cap(H), slot_back)
 			if(4) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-		var/obj/item/clothing/under/U = new /obj/item/clothing/under/rank/captain(H)
+		var/obj/item/clothing/under/U = new /obj/item/clothing/under/unsc/command(H)
 		if(H.age>49)
 			U.accessories += new /obj/item/clothing/accessory/medal/gold/captain(U)
 		H.equip_to_slot_or_del(U, slot_w_uniform)
@@ -48,7 +48,7 @@ var/datum/announcement/minor/captain_announcement = new(do_newscast = 1)
 
 
 /datum/job/hop
-	title = "Head of Personnel"
+	title = "First Officer"
 	flag = HOP
 	department = "Civilian"
 	head_position = 1
@@ -83,7 +83,7 @@ var/datum/announcement/minor/captain_announcement = new(do_newscast = 1)
 			if(2) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(H), slot_back)
 			if(3) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
 			if(4) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-		H.equip_to_slot_or_del(new /obj/item/clothing/under/rank/head_of_personnel(H), slot_w_uniform)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/unsc/command(H), slot_w_uniform)
 		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 		H.equip_to_slot_or_del(new /obj/item/device/pda/heads/hop(H), slot_belt)
 		if(H.backbag == 1)

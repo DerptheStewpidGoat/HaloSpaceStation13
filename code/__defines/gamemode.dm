@@ -9,38 +9,38 @@
 #define SEC_LEVEL_RED   2
 #define SEC_LEVEL_DELTA 3
 
+//special role flags
 #define BE_TRAITOR    0x1
-#define BE_OPERATIVE  0x2
-#define BE_CHANGELING 0x4
-#define BE_WIZARD     0x8
-#define BE_MALF       0x10
-#define BE_REV        0x20
-#define BE_ALIEN      0x40
-#define BE_AI         0x80
-#define BE_CULTIST    0x100
-#define BE_MONKEY     0x200
-#define BE_NINJA      0x400
-#define BE_RAIDER     0x800
-#define BE_PLANT      0x1000
-#define BE_MUTINEER   0x2000
-#define BE_PAI        0x4000
+#define BE_SPARTAN    0x2
+#define BE_ODST       0x4
+#define BE_MALF       0x8
+#define BE_AI         0x10
+#define BE_INNIE      0x20
+#define BE_ONI        0x40
+
+//unused
+#define BE_OPERATIVE  0
+#define BE_CHANGELING 0
+#define BE_WIZARD     0
+#define BE_REV        0
+#define BE_ALIEN      0
+#define BE_CULTIST    0
+#define BE_MONKEY     0
+#define BE_NINJA      0
+#define BE_RAIDER     0
+#define BE_PLANT      0
+#define BE_MUTINEER   0
+#define BE_PAI        0
+#define BE_LOYALIST   0
 
 var/list/be_special_flags = list(
 	"Traitor"          = BE_TRAITOR,
-	"Operative"        = BE_OPERATIVE,
-	"Changeling"       = BE_CHANGELING,
-	"Wizard"           = BE_WIZARD,
+	"Spartan"          = BE_SPARTAN,
+	"ODST Trooper"     = BE_ODST,
+	"AI"               = BE_AI,
 	"Malf AI"          = BE_MALF,
-	"Revolutionary"    = BE_REV,
-	"Xenomorph"        = BE_ALIEN,
-	"Positronic Brain" = BE_AI,
-	"Cultist"          = BE_CULTIST,
-	"Monkey"           = BE_MONKEY,
-	"Ninja"            = BE_NINJA,
-	"Raider"           = BE_RAIDER,
-	"Diona"            = BE_PLANT,
-	"Mutineer"         = BE_MUTINEER,
-	"pAI"              = BE_PAI
+	"Insurrectionist"  = BE_INNIE,
+	"ONI operative"    = BE_ONI
 )
 
 #define IS_MODE_COMPILED(MODE) (ispath(text2path("/datum/game_mode/"+(MODE))))
@@ -60,6 +60,12 @@ var/list/be_special_flags = list(
 #define ANTAG_SET_APPEARANCE    0x400 // Causes antagonists to use an appearance modifier on spawn.
 
 // Mode/antag template macros.
+#define MODE_MALFUNCTION "malf"
+#define MODE_TRAITOR "traitor"
+#define MODE_INNIE "insurrection"
+#define MODE_INNIE_TRAITOR "innie sympathiser"
+
+//unused
 #define MODE_BORER "borer"
 #define MODE_XENOMORPH "xeno"
 #define MODE_LOYALIST "loyalist"
@@ -77,8 +83,7 @@ var/list/be_special_flags = list(
 #define MODE_MONKEY "monkey"
 #define MODE_RENEGADE "renegade"
 #define MODE_REVOLUTIONARY "revolutionary"
-#define MODE_MALFUNCTION "malf"
-#define MODE_TRAITOR "traitor"
+#define MODE_LOYALIST "loyalist"
 
 #define DEFAULT_TELECRYSTAL_AMOUNT 12
 

@@ -444,9 +444,20 @@
 	id = access_syndicate
 	access_type = ACCESS_TYPE_SYNDICATE
 
+/var/const/access_insurrectionist = 250
+/datum/access/insurrectionist
+	id = access_insurrectionist
+	access_type = ACCESS_TYPE_SYNDICATE
+
 /*******
 * Misc *
 *******/
+/var/const/access_synth = 199
+/datum/access/synthetic
+	id = access_synth
+	desc = "Synthetic"
+	access_type = ACCESS_TYPE_NONE
+
 /var/const/access_crate_cash = 200
 /datum/access/crate_cash
 	id = access_crate_cash

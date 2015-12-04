@@ -15,28 +15,25 @@ proc/explosion(turf/epicenter, devastation_range, heavy_impact_range, light_impa
 ///// Z-Level Stuff
 		//note that these calls are recursive but each successive explosive is weaker than the last
 		//explosion strength fall off is linear but fairly steep
-		if( (devastation_range > 0 || heavy_impact_range > 0) && epicenter.ztransit_enabled_down() )
+		var/turf/below = GetBelow(epicenter)
+		if( (devastation_range > 0 || heavy_impact_range > 0) && below )
 			//start a child explosion, no admin log
 			spawn(0)
-				explosion(locate(epicenter.x, epicenter.y, epicenter.z + 1), max(devastation_range - 2, 0), max(heavy_impact_range - 2, 0), max(light_impact_range - 2, 0), max(flash_range - 2, 0), 0)
+				explosion(below, max(devastation_range - 2, 0), max(heavy_impact_range - 2, 0), max(light_impact_range - 2, 0), max(flash_range - 2, 0), 0)
 
-		if( (devastation_range > 0 || heavy_impact_range > 0) && epicenter.ztransit_enabled_up() )
+		var/turf/above = GetAbove(epicenter)
+		if( (devastation_range > 0 || heavy_impact_range > 0) && above )
 			//start the child explosion, no admin log
 			spawn(0)
-				explosion(locate(epicenter.x, epicenter.y, epicenter.z - 1), max(devastation_range - 2, 0), max(heavy_impact_range - 2, 0), max(light_impact_range - 2, 0), max(flash_range - 2, 0), 0, 0)
+				explosion(above, max(devastation_range - 2, 0), max(heavy_impact_range - 2, 0), max(light_impact_range - 2, 0), max(flash_range - 2, 0), 0, 0)
 ///// Z-Level Stuff
 
 		var/max_range = max(devastation_range, heavy_impact_range, light_impact_range, flash_range)
-		//playsound(epicenter, 'sound/effects/explosionfar.ogg', 100, 1, round(devastation_range*2,1) )
-		//playsound(epicenter, "explosion", 100, 1, round(devastation_range,1) )
 
-// Play sounds; we want sounds to be different depending on distance so we will manually do it ourselves.
-
-// Stereo users will also hear the direction of the explosion!
-
-// Calculate far explosion sound range. Only allow the sound effect for heavy/devastating explosions.
-
-// 3/7/14 will calculate to 80 + 35
+		// Play sounds; we want sounds to be different depending on distance so we will manually do it ourselves.
+		// Stereo users will also hear the direction of the explosion!
+		// Calculate far explosion sound range. Only allow the sound effect for heavy/devastating explosions.
+		// 3/7/14 will calculate to 80 + 35
 		var/far_dist = 0
 		far_dist += heavy_impact_range * 5
 		far_dist += devastation_range * 20
@@ -67,10 +64,6 @@ proc/explosion(turf/epicenter, devastation_range, heavy_impact_range, light_impa
 		if(adminlog)
 			message_admins("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</a>)")
 			log_game("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ")
-
-//		var/lighting_controller_was_processing = lighting_controller.processing	//Pause the lighting updates for a bit
-//		lighting_controller.processing = 0
-
 
 		var/approximate_intensity = (devastation_range * 3) + (heavy_impact_range * 2) + light_impact_range
 		var/powernet_rebuild_was_deferred_already = defer_powernet_rebuild
@@ -113,7 +106,6 @@ proc/explosion(turf/epicenter, devastation_range, heavy_impact_range, light_impa
 
 		sleep(8)
 
-//		if(!lighting_controller.processing)	lighting_controller.processing = lighting_controller_was_processing
 		if(!powernet_rebuild_was_deferred_already && defer_powernet_rebuild)
 			makepowernets()
 			defer_powernet_rebuild = 0

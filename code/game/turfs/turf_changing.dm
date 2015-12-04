@@ -2,8 +2,8 @@
 /turf/proc/ReplaceWithLattice()
 	//check if we need to use open space or ordinary space tile
 	var/turftype = get_base_turf(src.z)
-	if(src.ztransit_enabled_down())
-		var/turf/T = locate(x, y, z + 1)
+	var/turf/T = GetBelow(src)
+	if(T)
 		if(!istype(T, /turf/space))
 			turftype = /turf/simulated/floor/open
 	src.ChangeTurf(turftype)
@@ -69,19 +69,18 @@
 	while(T)
 		//world << "	new cycle ([T.type] z[T.z])"
 		if(istype(T, /turf/space))
-			if(T.ztransit_enabled_down())
-				//world << "can transit down"
-				var/turf/below = locate(T.x, T.y, T.z + 1)
-				// dont make open space into space, its pointless and makes people drop out of the station
-				if(!istype(below, /turf/space))
-					//world << "turf below is ground (plating etc), changing this one to open"
-					if(T == W)
-						spawn(0)
-							W = T.ChangeTurf(/turf/simulated/floor/open)
-							. = W
-						break
-					else
-						T = T.ChangeTurf(/turf/simulated/floor/open)
+			var/turf/below = GetBelow(src)
+			// dont make open space into space, its pointless and makes people drop out of the station
+			if(below && !istype(below, /turf/space))
+				//world << "turf below is ground (plating etc), changing this one to open"
+				if(T == W)
+					//change this turf type later
+					spawn(0)
+						W = T.ChangeTurf(/turf/simulated/floor/open)
+						. = W
+					break
+				else
+					T = T.ChangeTurf(/turf/simulated/floor/open)
 
 		else if(istype(T, /turf/simulated/floor/open))
 			//world << "turf is open"
@@ -89,12 +88,7 @@
 				//world << "calling level update"
 				T.levelupdate()
 
-		if(T.ztransit_enabled_up())
-			//world << "transit up is enabled, proceeding to next cycle"
-			T = locate(T.x, T.y, T.z - 1)
-		else
-			//world << "transit up is disabled"
-			T = null
+		T = GetAbove(T)
 ///// Z-Level Stuff
 
 	lighting_overlay = old_lighting_overlay

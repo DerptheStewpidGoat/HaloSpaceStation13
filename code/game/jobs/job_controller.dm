@@ -59,6 +59,7 @@ var/global/datum/controller/occupations/job_master
 				Debug("Player: [player] is now Rank: [rank], JCP:[job.current_positions], JPL:[position_limit]")
 				player.mind.assigned_role = rank
 				player.mind.role_alt_title = GetPlayerAltTitle(player, rank)
+				player.mind.faction_text = job.faction
 				unassigned -= player
 				job.current_positions++
 				return 1
@@ -245,7 +246,7 @@ var/global/datum/controller/occupations/job_master
 		HandleFeedbackGathering()
 
 		//People who wants to be assistants, sure, go on.
-		Debug("DO, Running Assistant Check 1")
+		/*Debug("DO, Running Assistant Check 1")
 		var/datum/job/assist = new DEFAULT_JOB_TYPE ()
 		var/list/assistant_candidates = FindOccupationCandidates(assist, 3)
 		Debug("AC1, Candidates: [assistant_candidates.len]")
@@ -253,7 +254,7 @@ var/global/datum/controller/occupations/job_master
 			Debug("AC1 pass, Player: [player]")
 			AssignRole(player, "Assistant")
 			assistant_candidates -= player
-		Debug("DO, AC1 end")
+		Debug("DO, AC1 end")*/
 
 		//Select one head
 		Debug("DO, Running Head Check")
@@ -424,6 +425,9 @@ var/global/datum/controller/occupations/job_master
 				S = locate("start*[rank]") // use old stype
 			if(istype(S, /obj/effect/landmark/start) && istype(S.loc, /turf))
 				H.loc = S.loc
+			else
+				LateSpawn(H, rank)
+
 			// Moving wheelchair if they have one
 			if(H.buckled && istype(H.buckled, /obj/structure/bed/chair/wheelchair))
 				H.buckled.loc = H.loc
@@ -611,3 +615,23 @@ var/global/datum/controller/occupations/job_master
 
 			tmp_str += "HIGH=[level1]|MEDIUM=[level2]|LOW=[level3]|NEVER=[level4]|BANNED=[level5]|YOUNG=[level6]|-"
 			feedback_add_details("job_preferences",tmp_str)
+
+/datum/controller/occupations/proc/LateSpawn(var/mob/living/carbon/human/H, var/rank)
+	//spawn at one of the latespawn locations
+
+	var/datum/spawnpoint/spawnpos
+
+	if(H.client.prefs.spawnpoint)
+		spawnpos = spawntypes[H.client.prefs.spawnpoint]
+
+	if(spawnpos && istype(spawnpos))
+		if(spawnpos.check_job_spawning(rank))
+			H.loc = pick(spawnpos.turfs)
+			. = spawnpos.msg
+		else
+			H << "Your chosen spawnpoint ([spawnpos.display_name]) is unavailable for your chosen job. Spawning you at the Arrivals shuttle instead."
+			H.loc = pick(latejoin)
+			. = "has arrived on the station"
+	else
+		H.loc = pick(latejoin)
+		. = "has arrived on the station"

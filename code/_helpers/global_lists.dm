@@ -52,7 +52,7 @@ var/global/list/underwear_f = list("Red" = "f1", "White" = "f2", "Yellow" = "f3"
 var/global/list/undershirt_t = list("White Tank top" = "u1", "Black Tank top" = "u2", "Black shirt" = "u3", "White shirt" = "u4", "None")
 	//Backpacks
 var/global/list/backbaglist = list("Nothing", "Backpack", "Satchel", "Satchel Alt")
-var/global/list/exclude_jobs = list(/datum/job/ai,/datum/job/cyborg)
+var/global/list/exclude_jobs = list(/datum/job/ai)//,/datum/job/cyborg)
 
 // Visual nets
 var/list/datum/visualnet/visual_nets = list()
@@ -120,9 +120,7 @@ var/global/list/syndicate_access = list(access_maint_tunnels, access_syndicate, 
 	for (var/language_name in all_languages)
 		var/datum/language/L = all_languages[language_name]
 		if(!(L.flags & NONGLOBAL))
-			language_keys[":[lowertext(L.key)]"] = L
-			language_keys[".[lowertext(L.key)]"] = L
-			language_keys["#[lowertext(L.key)]"] = L
+			language_keys[lowertext(L.key)] = L
 
 	var/rkey = 0
 	paths = typesof(/datum/species)-/datum/species

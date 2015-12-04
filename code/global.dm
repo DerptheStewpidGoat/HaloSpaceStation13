@@ -12,6 +12,7 @@ var/global/list/processing_power_items   = list()
 var/global/list/active_diseases          = list()
 var/global/list/med_hud_users            = list() // List of all entities using a medical HUD.
 var/global/list/sec_hud_users            = list() // List of all entities using a security HUD.
+var/global/list/hud_icon_reference       = list()
 
 
 var/global/list/global_mutations  = list() // List of hidden mutation things.
@@ -26,16 +27,16 @@ var/list/hit_appends = list("-OOF", "-ACK", "-UGH", "-HRNK", "-HURGH", "-GLORF")
 
 var/diary          = null
 var/href_logfile   = null
-var/station_name   = "NSS Exodus"
-var/station_short       = "Exodus"
-var/const/boss_name     = "Central Command"
-var/const/boss_short    = "Centcomm"
-var/const/company_name  = "NanoTrasen"
-var/const/company_short = "NT"
-var/game_version   = "Baystation12"
+var/station_name   = "UNSC Test Ship Please Ignore II"
+var/station_short       = "UNSC Test Ship Please Ignore II"
+var/const/boss_name     = "UNSC CENTCOM"
+var/const/boss_short    = "CENTCOM"
+var/const/company_name  = "UNSC"
+var/const/company_short = "UNSC"
+var/game_version   = "Halo Spacestation Evolved"
 var/changelog_hash = ""
 var/game_year      = (text2num(time2text(world.realtime, "YYYY")) + 544)
-
+var/going = 1.0
 var/round_progressing = 1
 var/master_mode       = "extended" // "extended"
 var/secret_force_mode = "secret"   // if this is anything but "secret", the secret rotation will forceably choose this mode.
@@ -70,7 +71,6 @@ var/list/tdomeobserve       = list()
 var/list/tdomeadmin         = list()
 var/list/prisonsecuritywarp = list() // Prison security goes to these.
 var/list/prisonwarped       = list() // List of players already warped.
-var/list/blobstart          = list()
 var/list/ninjastart         = list()
 
 var/list/cardinal    = list(NORTH, SOUTH, EAST, WEST)
@@ -84,7 +84,6 @@ var/list/reverse_dir = list( // reverse_dir[dir] = reverse of dir
 	23, 28, 30, 29, 31, 48, 50, 49, 51, 56, 58, 57, 59, 52, 54, 53, 55, 60, 62, 61, 63
 )
 
-var/datum/station_state/start_state = null
 var/datum/configuration/config      = null
 var/datum/sun/sun                   = null
 

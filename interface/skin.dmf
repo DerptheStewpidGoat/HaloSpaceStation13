@@ -265,11 +265,27 @@ macro "borghotkeymode"
 		is-disabled = false
 	elem 
 		name = "["
-		command = "Move Downwards"
+		command = "Travel-Downwards"
 		is-disabled = false
 	elem 
 		name = "]"
-		command = "Move Upwards"
+		command = "Travel-Upwards"
+		is-disabled = false
+	elem 
+		name = "NUMPAD2+REP"
+		command = ".southwest"
+		is-disabled = false
+	elem 
+		name = "NUMPAD4+REP"
+		command = ".northwest"
+		is-disabled = false
+	elem 
+		name = "NUMPAD6+REP"
+		command = ".southeast"
+		is-disabled = false
+	elem 
+		name = "NUMPAD8+REP"
+		command = ".northeast"
 		is-disabled = false
 
 macro "macro"
@@ -280,6 +296,10 @@ macro "macro"
 	elem 
 		name = "CENTER+REP"
 		command = ".center"
+		is-disabled = false
+	elem 
+		name = "SPACE+REP"
+		command = "vehicle-thrust"
 		is-disabled = false
 	elem 
 		name = "NORTHEAST"
@@ -367,7 +387,7 @@ macro "macro"
 		is-disabled = false
 	elem 
 		name = "CTRL+4"
-		command = "a-intent hurt"
+		command = "a-intent harm"
 		is-disabled = false
 	elem 
 		name = "CTRL+A+REP"
@@ -416,6 +436,42 @@ macro "macro"
 	elem 
 		name = "CTRL+Z"
 		command = "Activate-Held-Object"
+		is-disabled = false
+	elem 
+		name = "NUMPAD1+REP"
+		command = ".southwest"
+		is-disabled = false
+	elem 
+		name = "NUMPAD2+REP"
+		command = ".south"
+		is-disabled = false
+	elem 
+		name = "NUMPAD3+REP"
+		command = ".southeast"
+		is-disabled = false
+	elem 
+		name = "NUMPAD4+REP"
+		command = ".west"
+		is-disabled = false
+	elem 
+		name = "NUMPAD5"
+		command = "vehicle-thrust-toggle"
+		is-disabled = false
+	elem 
+		name = "NUMPAD6+REP"
+		command = ".east"
+		is-disabled = false
+	elem 
+		name = "NUMPAD7+REP"
+		command = ".northwest"
+		is-disabled = false
+	elem 
+		name = "NUMPAD8+REP"
+		command = ".north"
+		is-disabled = false
+	elem 
+		name = "NUMPAD9+REP"
+		command = ".northeast"
 		is-disabled = false
 	elem 
 		name = "F1"
@@ -757,11 +813,27 @@ macro "hotkeymode"
 		is-disabled = false
 	elem 
 		name = "["
-		command = "Move Downwards"
+		command = "Travel-Downwards"
 		is-disabled = false
 	elem 
 		name = "]"
-		command = "Move Upwards"
+		command = "Travel-Upwards"
+		is-disabled = false
+	elem 
+		name = "NUMPAD2+REP"
+		command = ".southwest"
+		is-disabled = false
+	elem 
+		name = "NUMPAD4+REP"
+		command = ".northwest"
+		is-disabled = false
+	elem 
+		name = "NUMPAD6+REP"
+		command = ".southeast"
+		is-disabled = false
+	elem 
+		name = "NUMPAD8+REP"
+		command = ".northeast"
 		is-disabled = false
 
 macro "borgmacro"
@@ -960,6 +1032,22 @@ macro "borgmacro"
 	elem 
 		name = "]"
 		command = "Move Upwards"
+		is-disabled = false
+	elem 
+		name = "NUMPAD2+REP"
+		command = ".southwest"
+		is-disabled = false
+	elem 
+		name = "NUMPAD4+REP"
+		command = ".northwest"
+		is-disabled = false
+	elem 
+		name = "NUMPAD6+REP"
+		command = ".southeast"
+		is-disabled = false
+	elem 
+		name = "NUMPAD8+REP"
+		command = ".northeast"
 		is-disabled = false
 
 

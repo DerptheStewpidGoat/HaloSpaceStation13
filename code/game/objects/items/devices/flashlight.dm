@@ -79,6 +79,8 @@
 					user << "<span class='notice'>\The [M]'s pupils narrow slightly, but are still very dilated.</span>"
 				else
 					user << "<span class='notice'>\The [M]'s pupils narrow.</span>"
+			
+			user.setClickCooldown(DEFAULT_ATTACK_COOLDOWN) //can be used offensively
 			flick("flash", M.flash)
 	else
 		return ..()
@@ -138,7 +140,8 @@
 	name = "flare"
 	desc = "A red standard-issue flare. There are instructions on the side reading 'pull cord, make light'."
 	w_class = 2.0
-	brightness_on = 7 // Pretty bright.
+	brightness_on = 8 // Pretty bright.
+	light_power = 3
 	light_color = "#e58775"
 	icon_state = "flare"
 	item_state = "flare"

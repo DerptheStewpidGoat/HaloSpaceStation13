@@ -1,5 +1,5 @@
 /datum/job/chief_engineer
-	title = "Chief Engineer"
+	title = "Chief Tech Officer"
 	flag = CHIEF
 	head_position = 1
 	department = "Engineering"
@@ -30,7 +30,7 @@
 			if(2) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
 			if(3) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
 			if(4) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-		H.equip_to_slot_or_del(new /obj/item/clothing/under/rank/chief_engineer(H), slot_w_uniform)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/unsc/engineering(H), slot_w_uniform)
 		H.equip_to_slot_or_del(new /obj/item/device/pda/heads/ce(H), slot_l_store)
 		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/hardhat/white(H), slot_head)
@@ -45,19 +45,19 @@
 
 
 /datum/job/engineer
-	title = "Station Engineer"
+	title = "Tech Officer"
 	flag = ENGINEER
 	department = "Engineering"
 	department_flag = ENGSEC
 	faction = "Station"
 	total_positions = 5
 	spawn_positions = 5
-	supervisors = "the chief engineer"
+	supervisors = "the chief tech officer"
 	selection_color = "#fff5cc"
 	economic_modifier = 5
 	access = list(access_eva, access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics)
 	minimal_access = list(access_eva, access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction)
-	alt_titles = list("Maintenance Technician","Engine Technician","Electrician")
+	//alt_titles = list("Maintenance Technician","Engine Technician","Electrician")
 
 
 	equip(var/mob/living/carbon/human/H)
@@ -67,7 +67,7 @@
 			if(2) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
 			if(3) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
 			if(4) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-		H.equip_to_slot_or_del(new /obj/item/clothing/under/rank/engineer(H), slot_w_uniform)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/unsc/engineering(H), slot_w_uniform)
 		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
 		H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/utility/full(H), slot_belt)
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/hardhat(H), slot_head)
@@ -89,7 +89,7 @@
 	faction = "Station"
 	total_positions = 3
 	spawn_positions = 2
-	supervisors = "the chief engineer"
+	supervisors = "the chief tech officer"
 	selection_color = "#fff5cc"
 	economic_modifier = 5
 	access = list(access_eva, access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics, access_external_airlocks)
@@ -103,7 +103,7 @@
 			if(2) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(H), slot_back)
 			if(3) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
 			if(4) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-		H.equip_to_slot_or_del(new /obj/item/clothing/under/rank/atmospheric_technician(H), slot_w_uniform)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/unsc/engineering(H), slot_w_uniform)
 		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
 		H.equip_to_slot_or_del(new /obj/item/device/pda/atmos(H), slot_l_store)
 		H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/utility/atmostech/(H), slot_belt)

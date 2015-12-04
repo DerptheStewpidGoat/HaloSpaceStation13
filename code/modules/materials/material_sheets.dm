@@ -65,9 +65,10 @@
 	var/obj/item/stack/material/M = S
 	if(!istype(M) || material.name != M.material.name)
 		return 0
-	..(S,tamount,1)
+	var/transfer = ..(S,tamount,1)
 	if(src) update_strings()
 	if(M) M.update_strings()
+	return transfer
 
 /obj/item/stack/material/attack_self(var/mob/user)
 	if(!material.build_windows(user, src))
@@ -207,4 +208,12 @@
 	desc = "This sheet is special platinum-glass alloy designed to withstand large temperatures. It is reinforced with few rods."
 	singular_name = "reinforced borosilicate glass sheet"
 	icon_state = "sheet-phoronrglass"
+	default_type = "reinforced borosilicate glass"
+
+/obj/item/stack/material/glass/alon
+	name = "bulletproof glass"
+	desc = "Three inch sheet of aluminium oxynitride. Impervious to small arms fire, resistant to up to .50 caliber."
+	singular_name = "bulletproof glass sheet"
+	icon_state = "sheet-glass"
+	default_type = "bulletproof glass"
 	default_type = "reinforced borosilicate glass"

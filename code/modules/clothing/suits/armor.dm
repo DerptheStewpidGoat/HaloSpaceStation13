@@ -10,15 +10,6 @@
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.6
 
-
-/obj/item/clothing/suit/armor/vest
-	name = "armor"
-	desc = "An armored vest that protects against some damage."
-	icon_state = "armor"
-	item_state = "armor"
-	blood_overlay_type = "armor"
-	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
-
 /obj/item/clothing/suit/armor/vest/security
 	name = "security armor"
 	desc = "An armored vest that protects against some damage. This one has a corporate badge."
@@ -62,6 +53,26 @@
 	blood_overlay_type = "armor"
 	armor = list(melee = 10, bullet = 10, laser = 80, energy = 50, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0
+
+/obj/item/clothing/suit/armor/laserproof/handle_shield(mob/user, var/damage, atom/damage_source = null, mob/attacker = null, var/def_zone = null, var/attack_text = "the attack")
+	if(istype(damage_source, /obj/item/projectile/energy) || istype(damage_source, /obj/item/projectile/beam))
+		var/obj/item/projectile/P = damage_source
+
+		var/reflectchance = 40 - round(damage/3)
+		if(!(def_zone in list("chest", "groin")))
+			reflectchance /= 2
+		if(P.starting && prob(reflectchance))
+			visible_message("<span class='danger'>\The [user]'s [src.name] reflects [attack_text]!</span>")
+
+			// Find a turf near or on the original location to bounce to
+			var/new_x = P.starting.x + pick(0, 0, 0, 0, 0, -1, 1, -2, 2)
+			var/new_y = P.starting.y + pick(0, 0, 0, 0, 0, -1, 1, -2, 2)
+			var/turf/curloc = get_turf(user)
+
+			// redirect the projectile
+			P.redirect(new_x, new_y, curloc, user)
+
+			return PROJECTILE_CONTINUE // complete projectile permutation
 
 /obj/item/clothing/suit/armor/swat
 	name = "swat suit"
@@ -113,9 +124,27 @@
 	slowdown = 1
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
-/obj/item/clothing/suit/armor/reactive/IsShield()
-	if(active)
-		return 1
+/obj/item/clothing/suit/armor/reactive/handle_shield(mob/user, var/damage, atom/damage_source = null, mob/attacker = null, var/def_zone = null, var/attack_text = "the attack")
+	if(prob(50))
+		user.visible_message("<span class='danger'>The reactive teleport system flings [user] clear of the attack!</span>")
+		var/list/turfs = new/list()
+		for(var/turf/T in orange(6, user))
+			if(istype(T,/turf/space)) continue
+			if(T.density) continue
+			if(T.x>world.maxx-6 || T.x<6)	continue
+			if(T.y>world.maxy-6 || T.y<6)	continue
+			turfs += T
+		if(!turfs.len) turfs += pick(/turf in orange(6))
+		var/turf/picked = pick(turfs)
+		if(!isturf(picked)) return
+
+		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
+		spark_system.set_up(5, 0, user.loc)
+		spark_system.start()
+		playsound(user.loc, "sparks", 50, 1)
+
+		user.loc = picked
+		return PROJECTILE_FORCE_MISS
 	return 0
 
 /obj/item/clothing/suit/armor/reactive/attack_self(mob/user as mob)

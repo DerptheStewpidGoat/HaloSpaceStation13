@@ -270,7 +270,7 @@
 	owner.updatehealth() //droplimb will call updatehealth() again if it does end up being called
 
 	//If limb took enough damage, try to cut or tear it off
-	if(owner && loc == owner)
+	if(owner && loc == owner && !is_stump())
 		if(!cannot_amputate && config.limbs_can_break && (brute_dam + burn_dam) >= (max_damage * config.organ_health_multiplier))
 			//organs can come off in three cases
 			//1. If the damage source is edge_eligible and the brute damage dealt exceeds the edge threshold, then the organ is cut off.
@@ -807,13 +807,44 @@ Note that amputating the affected organ does in fact remove the infection from t
 			"\The [holder.legcuffed.name] falls off you.")
 		holder.drop_from_inventory(holder.legcuffed)
 
+// checks if all wounds on the organ are bandaged
+/obj/item/organ/external/proc/is_bandaged()
+	for(var/datum/wound/W in wounds)
+		if(W.internal) continue
+		if(!W.bandaged)
+			return 0
+	return 1
+
+// checks if all wounds on the organ are salved
+/obj/item/organ/external/proc/is_salved()
+	for(var/datum/wound/W in wounds)
+		if(W.internal) continue
+		if(!W.salved)
+			return 0
+	return 1
+
+// checks if all wounds on the organ are disinfected
+/obj/item/organ/external/proc/is_disinfected()
+	for(var/datum/wound/W in wounds)
+		if(W.internal) continue
+		if(!W.disinfected)
+			return 0
+	return 1
+
 /obj/item/organ/external/proc/bandage()
 	var/rval = 0
-	src.status &= ~ORGAN_BLEEDING
+	status &= ~ORGAN_BLEEDING
 	for(var/datum/wound/W in wounds)
 		if(W.internal) continue
 		rval |= !W.bandaged
 		W.bandaged = 1
+	return rval
+
+/obj/item/organ/external/proc/salve()
+	var/rval = 0
+	for(var/datum/wound/W in wounds)
+		rval |= !W.salved
+		W.salved = 1
 	return rval
 
 /obj/item/organ/external/proc/disinfect()
@@ -832,13 +863,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(W.internal) continue
 		rval |= !W.clamped
 		W.clamped = 1
-	return rval
-
-/obj/item/organ/external/proc/salve()
-	var/rval = 0
-	for(var/datum/wound/W in wounds)
-		rval |= !W.salved
-		W.salved = 1
 	return rval
 
 /obj/item/organ/external/proc/fracture()
@@ -897,6 +921,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(company)
 		model = company
 		var/datum/robolimb/R = all_robolimbs[company]
+		if(species && (species.name in R.species_cannot_use))
+			R = basic_robolimb
 		if(R)
 			force_icon = R.icon
 			name = "[R.company] [initial(name)]"
@@ -937,11 +963,14 @@ Note that amputating the affected organ does in fact remove the infection from t
 /obj/item/organ/external/proc/is_malfunctioning()
 	return ((status & ORGAN_ROBOT) && (brute_dam + burn_dam) >= 10 && prob(brute_dam + burn_dam))
 
-/obj/item/organ/external/proc/embed(var/obj/item/weapon/W, var/silent = 0)
+/obj/item/organ/external/proc/embed(var/obj/item/weapon/W, var/silent = 0, var/supplied_message)
 	if(!owner || loc != owner)
 		return
 	if(!silent)
-		owner.visible_message("<span class='danger'>\The [W] sticks in the wound!</span>")
+		if(supplied_message)
+			owner.visible_message("<span class='danger'>[supplied_message]</span>")
+		else
+			owner.visible_message("<span class='danger'>\The [W] sticks in the wound!</span>")
 	implants += W
 	owner.embedded_flag = 1
 	owner.verbs += /mob/proc/yank_out_object

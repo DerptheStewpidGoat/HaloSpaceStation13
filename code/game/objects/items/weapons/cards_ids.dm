@@ -71,7 +71,7 @@
 	var/uses = 10
 
 /obj/item/weapon/card/emag/resolve_attackby(atom/A, mob/user)
-	var/used_uses = A.emag_act(uses, user)
+	var/used_uses = A.emag_act(uses, user, src)
 	if(used_uses < 0)
 		return ..(A, user)
 
@@ -89,10 +89,15 @@
 	return 1
 
 /obj/item/weapon/card/id
-	name = "identification card"
-	desc = "A card used to provide ID and determine access across the station."
+	name = "UNSC identification card"
+	desc = "A card used to provide ID and determine access across the ship."
 	icon_state = "id"
 	item_state = "card-id"
+
+	sprite_sheets = list(
+		"Resomi" = 'icons/mob/species/resomi/id.dmi'
+		)
+
 	var/access = list()
 	var/registered_name = "Unknown" // The name registered_name on the card
 	slot_flags = SLOT_ID
@@ -149,7 +154,7 @@
 		id_card.dna_hash		= dna.unique_enzymes
 		id_card.fingerprint_hash= md5(dna.uni_identity)
 	id_card.update_name()
-	
+
 /mob/living/carbon/human/set_id_info(var/obj/item/weapon/card/id/id_card)
 	..()
 	id_card.age = age
@@ -211,6 +216,13 @@
 	assignment = "Syndicate Overlord"
 	access = list(access_syndicate, access_external_airlocks)
 
+/obj/item/weapon/card/id/insurrectionist
+	name = "UNSC identification card"
+	desc = "a almost perfect replica of a UNSC ID card, the only difference is that the UNSC logo is scratched out and besides it reads: 'UNSC SUKS DIKS'"
+	registered_name = "UNSC"
+	assignment = "?????"
+	access = list(access_syndicate, access_external_airlocks, access_maint_tunnels)
+
 /obj/item/weapon/card/id/captains_spare
 	name = "captain's spare ID"
 	desc = "The spare ID of the High Lord himself."
@@ -221,16 +233,16 @@
 /obj/item/weapon/card/id/captains_spare/New()
 	access = get_all_station_access()
 	..()
-		
+
 /obj/item/weapon/card/id/synthetic
 	name = "\improper Synthetic ID"
 	desc = "Access module for NanoTrasen Synthetics"
 	icon_state = "id-robot"
 	item_state = "tdgreen"
 	assignment = "Synthetic"
-	
+
 /obj/item/weapon/card/id/synthetic/New()
-	access = get_all_station_access()
+	access = get_all_station_access() + access_synth
 	..()
 
 /obj/item/weapon/card/id/centcom

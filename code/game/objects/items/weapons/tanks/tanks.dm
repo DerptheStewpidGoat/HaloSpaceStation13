@@ -15,6 +15,10 @@
 	throw_speed = 1
 	throw_range = 4
 
+	sprite_sheets = list(
+		"Resomi" = 'icons/mob/species/resomi/back.dmi'
+		)
+
 	var/datum/gas_mixture/air_contents = null
 	var/distribute_pressure = ONE_ATMOSPHERE
 	var/integrity = 3
@@ -37,53 +41,31 @@
 
 	processing_objects.Remove(src)
 
+	if(istype(loc, /obj/item/device/transfer_valve))
+		var/obj/item/device/transfer_valve/TTV = loc
+		TTV.remove_tank(src)
+
 	..()
 
 /obj/item/weapon/tank/examine(mob/user)
-	var/obj/icon = src
-	if (istype(src.loc, /obj/item/assembly))
-		icon = src.loc
-	if (!in_range(src, user))
-		if (icon == src) user << "<span class='notice'>It's \a \icon[icon][src]! If you want any more information you'll need to get closer.</span>"
-		return
-
-	var/celsius_temperature = src.air_contents.temperature-T0C
-	var/descriptive
-	var/status
-
-	if (celsius_temperature < 20)
-		descriptive = "cold"
-		status = "warning"
-	else if (celsius_temperature < 40)
-		descriptive = "room temperature"
-		status = "notice"
-	else if (celsius_temperature < 80)
-		descriptive = "lukewarm"
-		status = "warning"
-	else if (celsius_temperature < 100)
-		descriptive = "warm"
-		status = "warning"
-	else if (celsius_temperature < 300)
-		descriptive = "hot"
-		status = "danger"
-	else
-		descriptive = "furiously hot"
-		status = "danger"
-
-	user << "<span class='[status]'>\The \icon[icon][src] feels [descriptive]</span>"
-
-	return
-
-/obj/item/weapon/tank/blob_act()
-	if(prob(50))
-		var/turf/location = src.loc
-		if (!( istype(location, /turf) ))
-			qdel(src)
-
-		if(src.air_contents)
-			location.assume_air(air_contents)
-
-		qdel(src)
+	. = ..(user, 0)
+	if(.)
+		var/celsius_temperature = air_contents.temperature - T0C
+		var/descriptive
+		switch(celsius_temperature)
+			if(300 to INFINITY)
+				descriptive = "furiously hot"
+			if(100 to 300)
+				descriptive = "hot"
+			if(80 to 100)
+				descriptive = "warm"
+			if(40 to 80)
+				descriptive = "lukewarm"
+			if(20 to 40)
+				descriptive = "room temperature"
+			else
+				descriptive = "cold"
+		user << "<span class='notice'>\The [src] feels [descriptive].</span>"
 
 /obj/item/weapon/tank/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -271,7 +253,10 @@
 		qdel(src)
 
 	else if(pressure > TANK_RUPTURE_PRESSURE)
-		//world << "<span class='notice'>[x],[y] tank is rupturing: [pressure] kPa, integrity [integrity]</span>"
+		#ifdef FIREDBG
+		log_debug("<span class='warning'>[x],[y] tank is rupturing: [pressure] kPa, integrity [integrity]</span>")
+		#endif
+
 		if(integrity <= 0)
 			var/turf/simulated/T = get_turf(src)
 			if(!T)
@@ -283,7 +268,10 @@
 			integrity--
 
 	else if(pressure > TANK_LEAK_PRESSURE)
-		//world << "<span class='notice'>[x],[y] tank is leaking: [pressure] kPa, integrity [integrity]</span>"
+		#ifdef FIREDBG
+		log_debug("<span class='warning'>[x],[y] tank is leaking: [pressure] kPa, integrity [integrity]</span>")
+		#endif
+
 		if(integrity <= 0)
 			var/turf/simulated/T = get_turf(src)
 			if(!T)

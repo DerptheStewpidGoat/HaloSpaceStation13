@@ -127,8 +127,6 @@ var/list/name_to_material
 	var/obj/item/stack/S = new rod_product(get_turf(user))
 	S.add_fingerprint(user)
 	S.add_to_stacks(user)
-	if(!(user.l_hand && user.r_hand))
-		user.put_in_hands(S)
 
 /material/proc/build_wired_product(var/mob/user, var/obj/item/stack/used_stack, var/obj/item/stack/target_stack)
 	if(!wire_product)
@@ -499,6 +497,17 @@ var/list/name_to_material
 	stack_origin_tech = list(TECH_MATERIAL = 2)
 	composite_material = list() //todo
 	rod_product = null
+
+/material/glass/alon
+	name = "bulletproof glass"
+	display_name = "bulletproof glass"
+	stack_type = /obj/item/stack/material/glass/alon
+	stack_origin_tech = list(TECH_MATERIAL = 4)
+	composite_material = list()
+	created_window = /obj/structure/window/alon
+	hardness = 77
+	weight = 15
+	flags = MATERIAL_BRITTLE
 
 /material/plastic
 	name = "plastic"

@@ -61,8 +61,8 @@ var/list/teleportlocs = list()
 	for(var/area/AR in world)
 		if(istype(AR, /area/shuttle) || istype(AR, /area/syndicate_station) || istype(AR, /area/wizard_station)) continue
 		if(teleportlocs.Find(AR.name)) continue
-		var/turf/picked = pick(get_area_turfs(AR.type))
-		if (picked.z in config.station_levels)
+		var/turf/picked = pick_area_turf(AR.type, list(/proc/is_station_turf))
+		if (picked)
 			teleportlocs += AR.name
 			teleportlocs[AR.name] = AR
 
@@ -78,8 +78,8 @@ var/list/ghostteleportlocs = list()
 		if(istype(AR, /area/turret_protected/aisat) || istype(AR, /area/derelict) || istype(AR, /area/tdome) || istype(AR, /area/shuttle/specops/centcom))
 			ghostteleportlocs += AR.name
 			ghostteleportlocs[AR.name] = AR
-		var/turf/picked = pick(get_area_turfs(AR.type))
-		if (picked.z in config.player_levels)
+		var/turf/picked = pick_area_turf(AR.type, list(/proc/is_station_turf))
+		if (picked)
 			ghostteleportlocs += AR.name
 			ghostteleportlocs[AR.name] = AR
 
@@ -325,13 +325,6 @@ area/space/atmosalert()
 
 /area/dummy/           // Referenced in engine.dm:261
 
-/area/start            // will be unused once kurper gets his login interface patch done
-	name = "start area"
-	icon_state = "start"
-	requires_power = 0
-	lighting_use_dynamic = 0
-	has_gravity = 1
-
 // === end remove
 
 /area/alien
@@ -398,12 +391,17 @@ area/space/atmosalert()
 /area/innie_base
 	name = "\improper Insurectionist Base"
 	icon_state = "syndie-control"
-	requires_power = 0
 
 /area/innie_base/shuttle
 	name = "\improper Insurrectionist Shuttle"
 	icon_state = "syndie-ship"
-	requires_power = 0
+
+/area/innie_base/base_dock_innie
+	name = "\improper Insurrectionist Shuttle Base Dock"
+
+/area/innie_base/arrivals_dock_innie
+	name = "\improper Insurrectionist Shuttle Arrivals Dock"
+	icon_state = "syndie-ship"
 
 /area/innie_base/transit
 	name = "\improper Insurrectionist Shuttle Slipspace Bubble"
@@ -658,6 +656,7 @@ area/space/atmosalert()
 /area/maintenance
 	flags = RAD_SHIELDED
 	sound_env = TUNNEL_ENCLOSED
+	turf_initializer = new /datum/turf_initializer/maintenance()
 
 /area/maintenance/aft
 	name = "Aft Maintenance"
@@ -2053,6 +2052,10 @@ area/space/atmosalert()
 	name = "\improper Fore Block"
 	icon_state = "away3"
 
+/area/awaymission/BMPship4
+	name = "\improper Yonhet Ship Landing Site"
+	icon_state = "away"
+
 /area/awaymission/spacebattle
 	name = "\improper Space Battle"
 	icon_state = "away"
@@ -2089,6 +2092,9 @@ area/space/atmosalert()
 	name = "\improper Listening Post"
 	icon_state = "away"
 	requires_power = 0
+
+/area/awaymission/listeningpost/shuttle
+	name = "\improper Listening Post Dock"
 
 /area/awaymission/beach
 	name = "Beach"

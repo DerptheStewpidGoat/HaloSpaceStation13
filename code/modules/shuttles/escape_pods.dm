@@ -4,12 +4,12 @@
 /datum/shuttle/ferry/escape_pod/init_docking_controllers()
 	..()
 	arming_controller = locate(dock_target_station)
-	if(!istype(arming_controller))
+	if(!istype(arming_controller) && announce_errors)
 		world << "<span class='danger'>warning: escape pod with station dock tag [dock_target_station] could not find it's dock target!</span>"
 	
 	if(docking_controller)
 		var/obj/machinery/embedded_controller/radio/simple_docking_controller/escape_pod/controller_master = docking_controller.master
-		if(!istype(controller_master))
+		if(!istype(controller_master) && announce_errors)
 			world << "<span class='danger'>warning: escape pod with docking tag [docking_controller_tag] could not find it's controller master!</span>"
 		else
 			controller_master.pod = src
@@ -28,7 +28,7 @@
 
 /datum/shuttle/ferry/escape_pod/can_cancel()
 	return 0
-
+	
 	
 //This controller goes on the escape pod itself
 /obj/machinery/embedded_controller/radio/simple_docking_controller/escape_pod

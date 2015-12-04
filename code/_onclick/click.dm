@@ -26,7 +26,7 @@
 
 /*
 	Standard mob ClickOn()
-	Handles exceptions: Buildmode, middle click, modified clicks, mech actions
+	Handles exceptions: Buildmode, middle click, modified clicks, mech actions, machine actions
 
 	After that, mostly just check your state, check whether you're holding an item,
 	check whether you're adjacent to the target, then pass off the click to whoever
@@ -65,6 +65,11 @@
 
 	if(stat || paralysis || stunned || weakened)
 		return
+
+	//
+	if(machine && istype(machine))
+		if(machine.machineClickOn(A, params))
+			return
 
 	face_atom(A) // change direction to face what you clicked on
 
@@ -176,10 +181,6 @@
 
 	if(!ticker)
 		src << "You cannot attack people before the game has started."
-		return 0
-
-	if (istype(get_area(src), /area/start))
-		src << "No attacking people at spawn, you jackass."
 		return 0
 
 	if(stat)

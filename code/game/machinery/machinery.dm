@@ -91,6 +91,13 @@ Class Procs:
 
 
 	Compiled by Aygar
+
+	machineClickOn(var/atom/A, var/params)      'game/machinery/machine.dm'
+		Called by '/mob/proc/ClickOn' in 'code\_onclick\click.dm' if the usr has a machine set.
+		A generalised system for mobs interacting with atoms via obj/machineryry eg for use with targetting systems
+		To use, define within your machine and return 1
+		For the equivalent proc with an obj held in the hand, see '/obj/item/proc/afterattack' in 'code\_onclick\item_attack.dm'
+
 */
 
 /obj/machinery
@@ -171,10 +178,6 @@ Class Procs:
 		else
 	return
 
-/obj/machinery/blob_act()
-	if(prob(50))
-		qdel(src)
-
 //sets the use_power var and then forces an area power update
 /obj/machinery/proc/update_use_power(var/new_use_power)
 	use_power = new_use_power
@@ -195,7 +198,10 @@ Class Procs:
 	return (stat & (NOPOWER|BROKEN|additional_flags))
 
 /obj/machinery/CanUseTopic(var/mob/user)
-	if(!interact_offline && (stat & (NOPOWER|BROKEN)))
+	if(stat & BROKEN)
+		return STATUS_CLOSE
+
+	if(!interact_offline && (stat & NOPOWER))
 		return STATUS_CLOSE
 
 	return ..()
@@ -340,3 +346,7 @@ Class Procs:
 		I.loc = loc
 	qdel(src)
 	return 1
+
+//called when the player clicks on something while using a machine
+/obj/machinery/proc/machineClickOn(var/atom/A, var/params)
+	return 0

@@ -64,10 +64,10 @@
 	..()
 	if(isliving(AM))
 		var/mob/M = AM
-		
+
 		if(M.buckled) //wheelchairs, office chairs, rollerbeds
 			return
-		
+
 		M << "<span class='danger'>You step on \the [src]!</span>"
 		playsound(src.loc, 'sound/effects/glass_step.ogg', 50, 1) // not sure how to handle metal shards with sounds
 		if(ishuman(M))
@@ -78,7 +78,7 @@
 
 			if( H.shoes || ( H.wear_suit && (H.wear_suit.body_parts_covered & FEET) ) )
 				return
-			
+
 			var/list/check = list("l_foot", "r_foot")
 			while(check.len)
 				var/picked = pick(check)
@@ -101,3 +101,6 @@
 
 /obj/item/weapon/material/shard/phoron/New(loc)
 	..(loc, "phglass")
+
+/obj/item/weapon/material/shard/alon/New(loc)
+	..(loc, "alon")

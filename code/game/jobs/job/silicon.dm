@@ -8,7 +8,7 @@
 	selection_color = "#ccffcc"
 	supervisors = "your laws"
 	req_admin_notify = 1
-	minimal_player_age = 7
+	//minimal_player_age = 7
 	account_allowed = 0
 	economic_modifier = 0
 	equip(var/mob/living/carbon/human/H)
@@ -29,7 +29,7 @@
 /datum/job/ai/equip_preview(mob/living/carbon/human/H)
 	H.equip_to_slot_or_del(new /obj/item/clothing/suit/straight_jacket(H), slot_wear_suit)
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/cardborg(H), slot_head)
-
+/*
 /datum/job/cyborg
 	title = "Cyborg"
 	flag = CYBORG
@@ -60,3 +60,4 @@
 /datum/job/cyborg/equip_preview(mob/living/carbon/human/H)
 	H.equip_to_slot_or_del(new /obj/item/clothing/suit/cardborg(H), slot_wear_suit)
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/cardborg(H), slot_head)
+*/
